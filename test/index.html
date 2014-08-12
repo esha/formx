@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html data-formx-dot>
+<head>
+  <meta charset="utf-8">
+  <title>FORMx Test Suite</title>
+  <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css" media="screen">
+  <script src="../bower_components/qunit/qunit/qunit.js"></script>
+  <script src="../bower_components/domx/dist/domx.js"></script>
+  <script src="../bower_components/eventi/dist/eventi.js"></script>
+  <script src="../dist/formx.js"></script>
+  <script src="ajax-form.js"></script>
+  <script src="expanding-textarea.js"></script>
+  <script src="validate.js"></script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <form ajax>
+        <textarea name="text" expanding>
+        </textarea>
+        <input name="number" type="number">
+        <input name="email" type="email">
+        <input name="url" type="url">
+        <input name="required" required>
+        <input name="pattern" pattern="[abc]+">
+        <input name="maxlength" maxlength="5">
+        <input name="min" min="5">
+        <input name="max" max="5">
+        <input name="step" step="10">
+        <input name="minlength" minlength="5">
+        <input name="equal-to" equal-to="minlength">
+        <input name="not-equal" not-equal="minlength">
+        <input name="restrict" type="number" min="0" max="4" step="2" required>
+    </form>
+  </div>
+</body>
+</html>
