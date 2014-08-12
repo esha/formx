@@ -24,7 +24,7 @@
     }
   ],
   "scripts": {
-    "test": "bower install && grunt qunit"
+    "test": "grunt qunit"
   },
   "dependencies": {
     "domx": "~0.10.0",
