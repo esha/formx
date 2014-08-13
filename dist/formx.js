@@ -1,4 +1,4 @@
-/*! formx - v0.1.0 - 2014-08-12
+/*! formx - v0.1.1 - 2014-08-13
 * http://esha.github.io/formx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -161,7 +161,7 @@ Eventi.on('keyup submit validate', function(e, event) {
     if (el.matches(validate.field)) {
         valid = validate.one(el, event);
     } else if (event === 'submit' || event === 'validate') {
-        valid = validate.all(el.closest(validate.form), event);
+        valid = validate.all(Eventi._.closest(el, 'form'), event);
     }
     return valid;
 });
@@ -178,14 +178,20 @@ Eventi.on('focusout<[restrict]>', function(e) {
 // end validate
 // ajaxForm
 var aF = FORMx.ajaxForm = {
-    selector: 'form[ajax]'
+    selector: 'form[ajax]',
+    init: function() {
+        D.queryAll(aF.selector).each(function(form) {
+            if (form.getAttribute('ajax') !== 'ready') {
+                form.setAttribute('ajax', 'ready');
+                form.addEventListener('submit', aF.block);
+            }
+        });
+    },
+    block: function(e){ e.preventDefault(); }
 };
 //TODO: actual ajax submission
-Eventi.on('^ready', function() {
-    Eventi.on(D.queryAll(aF.selector), 'submit', function(e) {
-        e.preventDefault();
-    });
-});
+aF.init();// early availability
+D.addEventListener('DOMContentLoaded', aF.init);// eventual consistency
 // end ajaxForm
 
 // expandingTextarea
