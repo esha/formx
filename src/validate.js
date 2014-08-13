@@ -153,7 +153,7 @@ Eventi.on('keyup submit validate', function(e, event) {
     if (el.matches(validate.field)) {
         valid = validate.one(el, event);
     } else if (event === 'submit' || event === 'validate') {
-        valid = validate.all(el.closest(validate.form), event);
+        valid = validate.all(Eventi._.closest(el, 'form'), event);
     }
     return valid;
 });

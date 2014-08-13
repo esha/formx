@@ -15,7 +15,7 @@
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture">
-    <form ajax>
+    <form>
         <textarea name="text" expanding>
         </textarea>
         <input name="number" type="number">
@@ -31,6 +31,10 @@
         <input name="equal-to" equal-to="minlength">
         <input name="not-equal" not-equal="minlength">
         <input name="restrict" type="number" min="0" max="4" step="2" required>
+    </form>
+    <form ajax novalidate>
+        <input type="number" value="infinity">
+        <button>Submit</button>
     </form>
   </div>
 </body>

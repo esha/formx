@@ -1,11 +1,17 @@
 // ajaxForm
 var aF = FORMx.ajaxForm = {
-    selector: 'form[ajax]'
+    selector: 'form[ajax]',
+    init: function() {
+        D.queryAll(aF.selector).each(function(form) {
+            if (form.getAttribute('ajax') !== 'ready') {
+                form.setAttribute('ajax', 'ready');
+                form.addEventListener('submit', aF.block);
+            }
+        });
+    },
+    block: function(e){ e.preventDefault(); }
 };
 //TODO: actual ajax submission
-Eventi.on('^ready', function() {
-    Eventi.on(D.queryAll(aF.selector), 'submit', function(e) {
-        e.preventDefault();
-    });
-});
+aF.init();// early availability
+D.addEventListener('DOMContentLoaded', aF.init);// eventual consistency
 // end ajaxForm

@@ -1,4 +1,4 @@
-(function(D, FORMx) {
+(function(D) {
 /*
 ======== A Handy Little QUnit Reference ========
 http://api.qunitjs.com/
@@ -19,11 +19,15 @@ Test assertions:
   notStrictEqual(actual, expected, [message])
   throws(block, [expected], [message])
 */
-    module("ajaxForm API");
+    module("ajaxForm");
 
-    test("FORMx.ajaxForm", function() {
-        ok(FORMx.ajaxForm, "FORMx.ajaxForm should be present");
+    test("don't cause page reload", function() {
+        var form = D.query('form[ajax]');
+        ok(form);
+        var button = form.query('button');
+        ok(button);
+        button.click();
     });
 
-}(document, window.FORMx));
+}(document));
 
