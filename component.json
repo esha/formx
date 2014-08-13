@@ -2,14 +2,14 @@
     "name": "formx",
     "repo": "esha/formx",
     "description": "A suite of declarative form extensions.",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "keywords": [
         "HTML",
         "DOMx",
         "form",
         "textarea",
         "ajax",
-        "expanding",
+        "flex",
         "validate"
     ],
     "dependencies": {},

@@ -1,4 +1,4 @@
-/*! formx - v0.1.1 - 2014-08-13
+/*! formx - v0.2.0 - 2014-08-13
 * http://esha.github.io/formx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -194,33 +194,35 @@ aF.init();// early availability
 D.addEventListener('DOMContentLoaded', aF.init);// eventual consistency
 // end ajaxForm
 
-// expandingTextarea
-var eTa = FORMx.expandingTextarea = {
-    selector: 'textarea[expanding]',
-    events: 'input onpropertychange change validate',
-    handle: function(e) {
-        var el = e.target,
-            was = el.rows,
-            h = 0;
-        if (el.value === '') {
-            el.rows = 1;
-        } else {
-            while (el.rows > 1 && el.scrollHeight < el.offsetHeight) {
-                el.rows--;
-            }
-            while (h !== el.offsetHeight && el.scrollHeight > el.offsetHeight) {
-                h = el.offsetHeight;
-                el.rows++;
-            }
+// flexTextarea
+var flex = FORMx.flexTextarea = {
+    selector: 'textarea[flex]',
+    events: 'input onpropertychange change',
+    adjust: function(el, shrunk) {
+        var height = el.scrollHeight,
+            style = el.style;
+        if (height > el.offsetHeight - 2) {
+            style.height = height + 'px';
+        } else if (!shrunk) {
+            style.height = '';
+            flex.adjust(el, true);
         }
-        if (was !== el.rows) {
-            Eventi.fire(el, 'rowChange', was);
+
+        var width = el.scrollWidth;
+        if (width > el.offsetWidth) {
+            style.width = width + 'px';
+        } else if (!shrunk) {
+            style.width = '';
+            flex.adjust(el, true);
         }
     }
 };
-eTa.events.split(' ').forEach(function(type) {
-    Eventi.on(D.body, type+'<'+eTa.selector+'>', eTa.handle);
+flex.events.split(' ').forEach(function(type) {
+    Eventi.on(D.body, type+'<'+flex.selector+'>', function() {
+        flex.adjust(this);
+    });
 });
-// end expandingTextarea
+// end flexTextarea
+
 
 })(document, Eventi);
