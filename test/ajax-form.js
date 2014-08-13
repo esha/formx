@@ -30,4 +30,3 @@ Test assertions:
     });
 
 }(document));
-

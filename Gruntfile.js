@@ -22,7 +22,7 @@ module.exports = function(grunt) {
       dist: {
         src: ['src/validate.js',
               'src/ajax-form.js',
-              'src/expanding-textarea.js'],
+              'src/flex-textarea.js'],
         dest: 'dist/<%= pkg.name %>.js'
       },
     },

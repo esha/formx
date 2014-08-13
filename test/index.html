@@ -9,15 +9,16 @@
   <script src="../bower_components/eventi/dist/eventi.js"></script>
   <script src="../dist/formx.js"></script>
   <script src="ajax-form.js"></script>
-  <script src="expanding-textarea.js"></script>
+  <script src="flex-textarea.js"></script>
   <script src="validate.js"></script>
 </head>
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture">
     <form>
-        <textarea name="text" expanding>
-        </textarea>
+        <textarea name="flex" flex></textarea>
+        <textarea name="nowrap" flex wrap="off"></textarea>
+        <textarea name="maxflex" flex style="max-height: 100px"></textarea>
         <input name="number" type="number">
         <input name="email" type="email">
         <input name="url" type="url">

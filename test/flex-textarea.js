@@ -19,10 +19,10 @@ Test assertions:
   notStrictEqual(actual, expected, [message])
   throws(block, [expected], [message])
 */
-    module("expandingTextarea API");
+    module("flexTextarea API");
 
-    test("FORMx.expandingTextarea", function() {
-        ok(FORMx.expandingTextarea, "FORMx.expandingTextarea should be present");
+    test("FORMx.flexTextarea", function() {
+        ok(FORMx.flexTextarea, "FORMx.flexTextarea should be present");
     });
 
 }(document, window.FORMx));
