@@ -60,7 +60,7 @@ var validate = FORMx.validate = {
            '[equal-to],[not-equal],[minlength]',// extensions
     toggle: function(el, valid) {
         el.classList.toggle('invalid', !valid);
-        el.setCustomValidity(valid ? '' : 'Invalid field.');
+        el.setCustomValidity(valid ? '' : 'This value is not valid.');
     },
 
     // internal functions
