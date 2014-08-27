@@ -167,4 +167,11 @@ Eventi.on('focusout<[restrict]>', function(e) {
         return false;
     }
 });
+D.head.append('style').textContent =
+    '.error { display: none; }\n' +
+    Object.keys(validate.classes).map(function(key) {
+        var _class = validate.classes[key];
+        return '.invalid.'+_class+' ~ .error.'+_class;
+    }).join(',\n') +
+    '{ display: inline-block; }';
 // end validate
