@@ -100,7 +100,7 @@ var validate = FORMx.validate = {
             el.classList.toggle('typeMismatch', !valid);
         }
         for (var name in validate.constraints) {
-            var constraint = el.getAttribute(name);
+            var constraint = el.getAttribute(name) || el.hasAttribute(name);
             if (constraint) {
                 var _class = validate.classes[name],
                     failed = validate.constraints[name](value, constraint);
