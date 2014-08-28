@@ -2,7 +2,7 @@
     "name": "formx",
     "repo": "esha/formx",
     "description": "A suite of declarative form extensions.",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "keywords": [
         "HTML",
         "DOMx",

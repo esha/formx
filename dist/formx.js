@@ -1,4 +1,4 @@
-/*! formx - v0.3.1 - 2014-08-28
+/*! formx - v0.3.2 - 2014-08-28
 * http://esha.github.io/formx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -31,7 +31,7 @@ var validate = FORMx.validate = {
             return !!referenceValue && !value;
         },
         'required-unless': function(value, reference, referenceValue) {
-            return !!referenceValue && !value;
+            return !referenceValue && !value;
         },
         maxlength: function(value, maxlength) {
             return value.length > parseInt(maxlength, 10);

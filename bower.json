@@ -1,6 +1,6 @@
 {
   "name": "formx",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "dist/formx.js",
   "description": "A suite of declarative form extensions.",
   "keywords": [
