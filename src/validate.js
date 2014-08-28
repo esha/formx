@@ -23,7 +23,7 @@ var validate = FORMx.validate = {
             return !!referenceValue && !value;
         },
         'required-unless': function(value, reference, referenceValue) {
-            return !!referenceValue && !value;
+            return !referenceValue && !value;
         },
         maxlength: function(value, maxlength) {
             return value.length > parseInt(maxlength, 10);
