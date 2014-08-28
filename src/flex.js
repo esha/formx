@@ -1,7 +1,7 @@
-// flexTextarea
-var flex = FORMx.flexTextarea = {
+// flex
+var flex = FORMx.flex = {
     selector: 'textarea[flex]',
-    events: 'input onpropertychange change',
+    events: 'input propertychange change',
     adjust: function(el, shrunk) {
         var height = el.scrollHeight,
             style = el.style;
@@ -26,4 +26,4 @@ flex.events.split(' ').forEach(function(type) {
         flex.adjust(this);
     });
 });
-// end flexTextarea
+// end flex

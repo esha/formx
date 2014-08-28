@@ -19,7 +19,7 @@ Test assertions:
   notStrictEqual(actual, expected, [message])
   throws(block, [expected], [message])
 */
-    module("ajaxForm");
+    module("ajax");
 
     test("don't cause page reload", function() {
         var form = D.query('form[ajax]');
