@@ -8,7 +8,7 @@ var validate = FORMx.validate = {
     },
     test: {
         required: function(value) {
-            return !validate.has(value);
+            return !value;
         },
         pattern: function(value, pattern) {
             return value && !value.match(new RegExp('^'+pattern+'$'));
@@ -20,10 +20,10 @@ var validate = FORMx.validate = {
             return value === referenceValue;
         },
         'required-if': function(value, reference, referenceValue) {
-            return validate.has(referenceValue) && !validate.has(value);
+            return !!referenceValue && !value;
         },
         'required-unless': function(value, reference, referenceValue) {
-            return !validate.has(referenceValue) && !validate.has(value);
+            return !!referenceValue && !value;
         },
         maxlength: function(value, maxlength) {
             return value.length > parseInt(maxlength, 10);
@@ -72,9 +72,6 @@ var validate = FORMx.validate = {
     },
 
     // internal functions
-    has: function(value) {
-        return !!(value && value.trim());
-    },
     parse: function(string) {
         return parseFloat(string);
     },
