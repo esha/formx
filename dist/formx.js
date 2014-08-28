@@ -1,4 +1,4 @@
-/*! formx - v0.2.0 - 2014-08-13
+/*! formx - v0.3.0 - 2014-08-28
 * http://esha.github.io/formx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -14,18 +14,24 @@ var validate = FORMx.validate = {
         email: /^[a-zA-Z0-9.!#$%&'*+-\/=?\^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
         url: /^http.[^\s]+$/i
     },
-    constraints: {
+    test: {
         required: function(value) {
-            return !(value && value.trim());
+            return !validate.has(value);
         },
         pattern: function(value, pattern) {
             return value && !value.match(new RegExp('^'+pattern+'$'));
         },
-        'equal-to': function(value, other) {
-            return value !== validate.valueOf(other);
+        'equal-to': function(value, reference, referenceValue) {
+            return value !== referenceValue;
         },
-        'not-equal': function(value, other) {
-            return value === validate.valueOf(other);
+        'not-equal': function(value, reference, referenceValue) {
+            return value === referenceValue;
+        },
+        'required-if': function(value, reference, referenceValue) {
+            return validate.has(referenceValue) && !validate.has(value);
+        },
+        'required-unless': function(value, reference, referenceValue) {
+            return !validate.has(referenceValue) && !validate.has(value);
         },
         maxlength: function(value, maxlength) {
             return value.length > parseInt(maxlength, 10);
@@ -57,6 +63,8 @@ var validate = FORMx.validate = {
         pattern: 'patternMismatch',
         'equal-to': 'notEqual',
         'not-equal': 'notDifferent',
+        'required-if': 'valueMissing',
+        'required-unless': 'valueMissing',
         maxlength: 'tooLong',
         minlength: 'tooShort',
         min: 'rangeUnderflow',
@@ -65,22 +73,22 @@ var validate = FORMx.validate = {
     },
     field: '[type=number],[type=email],[type=url],'+//types
            '[required],[pattern],[maxlength],[min],[max],[step],'+// standards
-           '[equal-to],[not-equal],[minlength]',// extensions
+           '[equal-to],[not-equal],[required-if],[required-unless],[minlength]',// extensions
     toggle: function(el, valid) {
         el.classList.toggle('invalid', !valid);
-        el.setCustomValidity(valid ? '' : 'Invalid field.');
+        el.setCustomValidity(valid ? '' : 'This value is not valid.');
     },
 
     // internal functions
-    valueOf: function(string) {
-        if (string) {
-            var el = D.query('[name="'+string+'"]');
-            string = el && el.value;
-        }
-        return string;
+    has: function(value) {
+        return !!(value && value.trim());
     },
     parse: function(string) {
-        return parseFloat(validate.valueOf(string));
+        return parseFloat(string);
+    },
+    valueOf: function(name, form) {
+        var el = form.query('[name="'+name+'"]');
+        return el && el.nameValue;
     },
     check: function(el, event) {
         var no = el.getAttribute('novalidate');
@@ -95,7 +103,7 @@ var validate = FORMx.validate = {
         }
         return no.split(' ').indexOf(event) === -1;
     },
-    one: function(el, event) {
+    one: function(el, event, form) {
         if (!validate.check(el, event)) {
             return true;
         }
@@ -103,15 +111,17 @@ var validate = FORMx.validate = {
         var typeRE = validate.type[el.getAttribute('type')],
             value = el.value,
             valid = true;
+        form = form || validate.getForm(el);
         if (typeRE) {
             valid = !value || !!value.match(typeRE);
             el.classList.toggle('typeMismatch', !valid);
         }
-        for (var name in validate.constraints) {
-            var constraint = el.getAttribute(name);
+        for (var name in validate.test) {
+            var constraint = el.getAttribute(name) || el.hasAttribute(name);
             if (constraint) {
                 var _class = validate.classes[name],
-                    failed = validate.constraints[name](value, constraint);
+                    referenceValue = validate.valueOf(constraint, form),
+                    failed = validate.test[name](value, referenceValue || constraint, referenceValue);
                 if (failed) {
                     valid = false;
                 }
@@ -131,7 +141,7 @@ var validate = FORMx.validate = {
 
         var valid = true;
         form.queryAll(validate.field).each(function(field) {
-            if (!validate.one(field, event)) {
+            if (!validate.one(field, event, form)) {
                 valid = false;
             }
         });
@@ -144,6 +154,9 @@ var validate = FORMx.validate = {
             }
         }
         return valid;
+    },
+    getForm: function(el) {
+        return Eventi._.closest(el, 'form') || D.body;
     }
 };
 
@@ -161,7 +174,7 @@ Eventi.on('keyup submit validate', function(e, event) {
     if (el.matches(validate.field)) {
         valid = validate.one(el, event);
     } else if (event === 'submit' || event === 'validate') {
-        valid = validate.all(Eventi._.closest(el, 'form'), event);
+        valid = validate.all(validate.getForm(el), event);
     }
     return valid;
 });
@@ -175,29 +188,38 @@ Eventi.on('focusout<[restrict]>', function(e) {
         return false;
     }
 });
+var errors = Object.keys(validate.classes)
+                   .map(function(key){ return validate.classes[key]; })
+                   .filter(function(error, i, self){ return self.indexOf(error) === i; });
+D.head.append('style').textContent =
+    '.error { display: none; }\n' +
+    errors.map(function(error) {
+        return '.invalid.'+error+' ~ .error.'+error;
+    }).join(',\n') +
+    ' { display: inline-block; }';
 // end validate
-// ajaxForm
-var aF = FORMx.ajaxForm = {
+// ajax
+var ajax = FORMx.ajax = {
     selector: 'form[ajax]',
     init: function() {
-        D.queryAll(aF.selector).each(function(form) {
+        D.queryAll(ajax.selector).each(function(form) {
             if (form.getAttribute('ajax') !== 'ready') {
                 form.setAttribute('ajax', 'ready');
-                form.addEventListener('submit', aF.block);
+                form.addEventListener('submit', ajax.block);
             }
         });
     },
     block: function(e){ e.preventDefault(); }
 };
 //TODO: actual ajax submission
-aF.init();// early availability
-D.addEventListener('DOMContentLoaded', aF.init);// eventual consistency
-// end ajaxForm
+ajax.init();// early availability
+D.addEventListener('DOMContentLoaded', ajax.init);// eventual consistency
+// end ajax
 
-// flexTextarea
-var flex = FORMx.flexTextarea = {
+// flex
+var flex = FORMx.flex = {
     selector: 'textarea[flex]',
-    events: 'input onpropertychange change',
+    events: 'input propertychange change',
     adjust: function(el, shrunk) {
         var height = el.scrollHeight,
             style = el.style;
@@ -222,7 +244,32 @@ flex.events.split(' ').forEach(function(type) {
         flex.adjust(this);
     });
 });
-// end flexTextarea
+// end flex
 
+// attributes
+var attributes = FORMx.attributes = {
+    selector: 'form[attributes]',
+    init: function() {
+        D.queryAll(attributes.selector).each(function(form) {
+            attributes.list(form).forEach(function(name) {
+                form.setAttribute(name, form.queryName(name).nameValue);
+            });
+            Eventi.on(form, 'change input propertychange', attributes.change);
+        });
+    },
+    list: function(form) {
+        return (form.getAttribute('attributes') || '').split(',');
+    },
+    change: function(e) {
+        var el = e.target,
+            name = el.name;
+        if (attributes.list(this).indexOf(name) >= 0) {
+            this.setAttribute(name, el.nameValue);
+        }
+    }
+};
+attributes.init();// early availability
+D.addEventListener('DOMContentLoaded', attributes.init);// eventual consistency
+// end attributes
 
 })(document, Eventi);
