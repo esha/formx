@@ -81,10 +81,10 @@ var validate = FORMx.validate = {
     },
     check: function(el, event) {
         var no = el.getAttribute('novalidate');
-        if (!no) {
+        if (!el.hasAttribute('novalidate') || no === 'false') {
             return true;
         }
-        if (no === 'true' || no === 'novalidate') {
+        if (no === 'true' || !no) {
             return false;
         }
         if (no.indexOf('!') === 0) {
