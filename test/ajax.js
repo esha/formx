@@ -22,11 +22,24 @@ Test assertions:
     module("ajax");
 
     test("don't cause page reload", function() {
+        expect(8);
         var form = D.query('form[ajax]');
         ok(form);
+        equal(form.getAttribute('ajax'), 'ready');
+        ok(!form.matches('.invalid'));
+
+        form.setAttribute('action', 'ajaxTest');
+        window.ajaxTest = function(values, e) {
+            ok(values);
+            strictEqual(form, this);
+            equal(e.type, 'submit');
+        };
+
         var button = form.query('button');
         ok(button);
+        equal(button.type, 'submit');
         button.click();
+        delete window.ajaxTest;
     });
 
 }(document));
