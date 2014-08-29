@@ -8,8 +8,10 @@ Download: [formx.min.js][full-min] or [formx.js][full] [![Build Status](https://
 [Component][component]: `component install esha/formx`  
 
 ### Release History
-* 2014-08-13 [v0.2.0][] (form[ajax], textarea[auto-rows], validate)
+* 2014-08-13 [v0.2.0][] (form[ajax], textarea[flex], validate)
 * 2014-08-28 [v0.3.2][] (css for validation error message control, required-if/required-unless validations, live attributes, simpler names)
+* 2014-08-29 [v0.4.0][] (better form[ajax], misc fixes)
 
 [v0.2.0]: https://github.com/esha/formx/tree/0.2.0
 [v0.3.2]: https://github.com/esha/formx/tree/0.3.2
+[v0.4.0]: https://github.com/esha/formx/tree/0.4.0

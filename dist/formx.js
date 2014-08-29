@@ -1,4 +1,4 @@
-/*! formx - v0.3.2 - 2014-08-28
+/*! formx - v0.4.0 - 2014-08-29
 * http://esha.github.io/formx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -89,10 +89,10 @@ var validate = FORMx.validate = {
     },
     check: function(el, event) {
         var no = el.getAttribute('novalidate');
-        if (!no) {
+        if (!el.hasAttribute('novalidate') || no === 'false') {
             return true;
         }
-        if (no === 'true' || no === 'novalidate') {
+        if (no === 'true' || !no) {
             return false;
         }
         if (no.indexOf('!') === 0) {
@@ -202,13 +202,28 @@ var ajax = FORMx.ajax = {
         D.queryAll(ajax.selector).each(function(form) {
             if (form.getAttribute('ajax') !== 'ready') {
                 form.setAttribute('ajax', 'ready');
-                form.addEventListener('submit', ajax.block);
+                form.setAttribute('onsubmit', 'return false');
+                form.addEventListener('submit', ajax.submit);
             }
         });
     },
-    block: function(e){ e.preventDefault(); }
+    submit: function(e) {
+        var form = this;
+        if (validate.all(form)) {
+            var action = form.getAttribute('action'),
+                method = form.getAttribute('method') || 'post',
+                fn = Eventi._.resolve(action, this) || Eventi._.resolve(action, window);
+            if (fn) {
+                if (typeof fn[method] === "function") {
+                    fn = fn[method];
+                }
+                fn.call(form, form.nameValue, e);
+            } else {
+                window.console.log('todo: actual ajax submission ', action, method);
+            }
+        }
+    }
 };
-//TODO: actual ajax submission
 ajax.init();// early availability
 D.addEventListener('DOMContentLoaded', ajax.init);// eventual consistency
 // end ajax
