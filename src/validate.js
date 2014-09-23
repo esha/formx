@@ -145,7 +145,7 @@ var validate = FORMx.validate = {
         return valid;
     },
     getForm: function(el) {
-        return Eventi._.closest(el, 'form') || D.body;
+        return el.closest('form,body');
     }
 };
 
