@@ -1,4 +1,4 @@
-/*! formx - v0.4.0 - 2014-08-29
+/*! formx - v0.4.1 - 2014-09-22
 * http://esha.github.io/formx/
 * Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
 
@@ -153,7 +153,7 @@ var validate = FORMx.validate = {
         return valid;
     },
     getForm: function(el) {
-        return Eventi._.closest(el, 'form') || D.body;
+        return el.closest('form,body');
     }
 };
 
