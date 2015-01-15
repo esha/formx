@@ -1,6 +1,6 @@
-/*! formx - v0.4.1 - 2014-09-22
+/*! formx - v0.4.2 - 2015-01-15
 * http://esha.github.io/formx/
-* Copyright (c) 2014 ESHA Research; Licensed MIT, GPL */
+* Copyright (c) 2015 ESHA Research; Licensed MIT, GPL */
 
 (function(D, Eventi) {
     "use strict";
@@ -85,7 +85,7 @@ var validate = FORMx.validate = {
     },
     valueOf: function(name, form) {
         var el = form.query('[name="'+name+'"]');
-        return el && el.nameValue;
+        return el && el.xValue;
     },
     check: function(el, event) {
         var no = el.getAttribute('novalidate');
@@ -217,7 +217,7 @@ var ajax = FORMx.ajax = {
                 if (typeof fn[method] === "function") {
                     fn = fn[method];
                 }
-                fn.call(form, form.nameValue, e);
+                fn.call(form, form.xValue, e);
             } else {
                 window.console.log('todo: actual ajax submission ', action, method);
             }
@@ -264,7 +264,7 @@ var attributes = FORMx.attributes = {
     init: function() {
         D.queryAll(attributes.selector).each(function(form) {
             attributes.list(form).forEach(function(name) {
-                form.setAttribute(name, form.queryName(name).nameValue);
+                form.setAttribute(name, form.queryName(name).xValue);
             });
             Eventi.on(form, 'change input propertychange', attributes.change);
         });
@@ -276,7 +276,7 @@ var attributes = FORMx.attributes = {
         var el = e.target,
             name = el.name;
         if (attributes.list(this).indexOf(name) >= 0) {
-            this.setAttribute(name, el.nameValue);
+            this.setAttribute(name, el.xValue);
         }
     }
 };
