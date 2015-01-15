@@ -43,10 +43,11 @@
     "Gruntfile.js"
   ],
   "dependencies": {
-    "domx": "~0.11.0",
-    "eventi": "~1.3.1"
+    "domx": "^0.16.1",
+    "eventi": "^1.3.6",
+    "domx-value": "~0.2.0"
   },
   "devDependencies": {
-    "qunit": "~1.15.0"
+    "qunit": "^1.15.0"
   }
 }

@@ -77,7 +77,7 @@ var validate = FORMx.validate = {
     },
     valueOf: function(name, form) {
         var el = form.query('[name="'+name+'"]');
-        return el && el.nameValue;
+        return el && el.xValue;
     },
     check: function(el, event) {
         var no = el.getAttribute('novalidate');

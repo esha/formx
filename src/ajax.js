@@ -20,7 +20,7 @@ var ajax = FORMx.ajax = {
                 if (typeof fn[method] === "function") {
                     fn = fn[method];
                 }
-                fn.call(form, form.nameValue, e);
+                fn.call(form, form.xValue, e);
             } else {
                 window.console.log('todo: actual ajax submission ', action, method);
             }

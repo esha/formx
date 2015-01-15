@@ -4,7 +4,7 @@ var attributes = FORMx.attributes = {
     init: function() {
         D.queryAll(attributes.selector).each(function(form) {
             attributes.list(form).forEach(function(name) {
-                form.setAttribute(name, form.queryName(name).nameValue);
+                form.setAttribute(name, form.queryName(name).xValue);
             });
             Eventi.on(form, 'change input propertychange', attributes.change);
         });
@@ -16,7 +16,7 @@ var attributes = FORMx.attributes = {
         var el = e.target,
             name = el.name;
         if (attributes.list(this).indexOf(name) >= 0) {
-            this.setAttribute(name, el.nameValue);
+            this.setAttribute(name, el.xValue);
         }
     }
 };
