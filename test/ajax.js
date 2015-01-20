@@ -21,8 +21,8 @@ Test assertions:
 */
     module("ajax");
 
-    test("don't cause page reload", function() {
-        expect(8);
+    test("ajax-ified form", function() {
+        expect(11);
         var form = D.query('form[ajax]');
         ok(form);
         equal(form.getAttribute('ajax'), 'ready');
@@ -35,11 +35,17 @@ Test assertions:
             equal(e.type, 'submit');
         };
 
+        equal(location.hash, '', 'no hash');
+        var target = form.getAttribute('target');
+        equal(target, '#target', 'has target');
+
         var button = form.query('button');
         ok(button);
         equal(button.type, 'submit');
         button.click();
         delete window.ajaxTest;
+
+        equal(location.hash, target, 'updated hash');
     });
 
 }(document));
